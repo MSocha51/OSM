@@ -1,25 +1,32 @@
 package osm.model;
 
-/**Class that represend patient blood pressure test. 
+/**
+ * Class that represend patient blood pressure test.
+ * 
  * @author msoch
  *
  */
 public class BloodPressureTest {
-	
+
 	public Integer systole; // skurczowe
-	public Integer diastole; //rozkurczowe 
+	public Integer diastole; // rozkurczowe
+
 	public Integer getSystole() {
 		return systole;
 	}
+
 	public void setSystole(Integer systole) {
 		this.systole = systole;
 	}
+
 	public Integer getDiastole() {
 		return diastole;
 	}
+
 	public void setDiastole(Integer diastole) {
 		this.diastole = diastole;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -28,6 +35,7 @@ public class BloodPressureTest {
 		result = prime * result + ((systole == null) ? 0 : systole.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -49,10 +57,10 @@ public class BloodPressureTest {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "BloodPressureTest [systole=" + systole + ", diastole=" + diastole + "]";
 	}
-	
 
 }

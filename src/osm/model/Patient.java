@@ -1,6 +1,8 @@
 package osm.model;
 
-/**Class that represent patient in data storage. 
+/**
+ * Class that represent patient in data storage.
+ * 
  * @author msoch
  *
  */
