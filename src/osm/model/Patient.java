@@ -12,6 +12,7 @@ public class Patient {
 	private String pesel;
 	private Character sex;
 	private String insurance;
+	private BloodPressureTest bloodPressureTest;
 
 	public String getName() {
 		return name;
@@ -55,6 +56,14 @@ public class Patient {
 
 	public void setInsurance(String insurance) {
 		this.insurance = insurance;
+	}
+	
+	public BloodPressureTest getBloodPressureTest() {
+		return bloodPressureTest;
+	}
+
+	public void setBloodPressureTest(BloodPressureTest bloodPressureTest) {
+		this.bloodPressureTest = bloodPressureTest;
 	}
 
 	@Override

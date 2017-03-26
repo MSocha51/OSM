@@ -11,6 +11,7 @@ public class MainWindow extends Window{
 	public MainWindow(){
 		createTies();
 		injectDependancy();
+		//TODO add everything layout,etc
 		
 	}
 	
