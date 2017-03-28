@@ -13,6 +13,17 @@ public class Patient {
 	private Character sex;
 	private String insurance;
 	private BloodPressureTest bloodPressureTest;
+	
+	
+
+	public Patient(String name, String surname, String pesel, Character sex, String insurance, BloodPressureTest test) {
+		this.name = name;
+		this.surname = surname;
+		this.pesel = pesel;
+		this.sex = sex;
+		this.insurance = insurance;
+		this.bloodPressureTest=test;
+	}
 
 	public String getName() {
 		return name;
@@ -41,7 +52,6 @@ public class Patient {
 	public Character getSex() {
 		return sex;
 	}
-
 	public void setSex(Character sex) throws IllegalArgumentException {
 		if (sex != null) {
 			if (sex.equals('M') || sex.equals('F'))
