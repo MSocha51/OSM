@@ -1,11 +1,12 @@
 package osm.view;
 
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import osm.controller.TableController;
 import osm.controller.TestFormController;
 import osm.model.BloodPressureTest;
 
-public class TestForm extends Pane implements TestFormController { //TODO change Pane type
+public class TestForm extends GridPane implements TestFormController { //TODO change Pane type
 	
 	private TableController tableController;
 
