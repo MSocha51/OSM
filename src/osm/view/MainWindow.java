@@ -43,6 +43,8 @@ public class MainWindow extends Application{
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Badania Pacientów");
 		primaryStage.setScene(scene);
+		scene.getStylesheets().add
+		 (MainWindow.class.getResource("/Style.css").toExternalForm());
 		primaryStage.show();		
 	}
 }
