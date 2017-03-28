@@ -7,3 +7,5 @@
 *.prefs
 .classpath
 .project
+.project
+*.classpath
