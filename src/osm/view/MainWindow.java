@@ -1,19 +1,16 @@
 package osm.view;
 
-import javafx.stage.Window;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-public class MainWindow extends Window{
+public class MainWindow extends Application{
 	
 	private TestForm testForm;
 	private PatientForm patientForm;
 	private PatientTable patientTable;
-
-	public MainWindow(){
-		createTies();
-		injectDependancy();
-		//TODO add everything layout,etc
-		
-	}
 	
 	private void createTies(){
 		testForm = new TestForm();
@@ -29,6 +26,23 @@ public class MainWindow extends Window{
 	}
 	
 	static public void main(String args[]){
-		new MainWindow();
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		createTies();
+		injectDependancy();
+		GridPane root = new GridPane();
+		root.setHgap(10);
+		root.setVgap(10);
+		root.setPadding(new Insets(10,10,10,10));
+		root.add(patientForm,0,0);
+		root.add(patientTable,1,0,4,2);
+		root.add(testForm, 0, 1);
+		Scene scene = new Scene(root);
+		primaryStage.setTitle("Badania Pacientów");
+		primaryStage.setScene(scene);
+		primaryStage.show();		
 	}
 }
