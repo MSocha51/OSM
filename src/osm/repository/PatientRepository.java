@@ -1,26 +1,40 @@
 package osm.repository;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import osm.model.BloodPressureTest;
 import osm.model.Patient;
 
 public class PatientRepository {
-	
+
 	private Set<Patient> patients = new HashSet<>();
-	
-	public Set<Patient> getPatients(){
+
+	public PatientRepository(){
+		patients.addAll(Arrays.asList(
+				new Patient("Matesz", "Socha", "950314", 'M', "NFZ", null),
+				new Patient("Iza", "Plucinska", "951021", 'K', "NFZ", new BloodPressureTest())
+				));
+	}
+
+	public Set<Patient> getPatients() {
 		return patients;
 	}
-	
-	public void addPateint(Patient patient){
+
+	public void addPateint(Patient patient) {
 		patients.add(patient);
 	}
-	
-	public Optional<Patient> getPatientByPesel(final String pesel){
-		return patients.stream()
-			.filter((p)->p.getPesel().equals(pesel))
-			.findAny();
+
+	public Optional<Patient> getPatientByPesel(final String pesel) {
+		return patients.stream().filter((p) -> p.getPesel().equals(pesel)).findAny();
+	}
+
+	public void removePatientByPesel(final String pesel) {
+		patients = patients.stream().filter(p -> !p.getPesel().equals(pesel)).collect(Collectors.toSet());
 	}
 }

@@ -3,7 +3,7 @@ package osm.model;
 /**
  * Class that represent patient in data storage.
  * 
- * @author msoch
+ * 
  *
  */
 public class Patient {

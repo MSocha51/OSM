@@ -4,9 +4,12 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import osm.controller.PatientFormController;
@@ -14,24 +17,32 @@ import osm.controller.TableController;
 import osm.controller.TestFormController;
 import osm.model.BloodPressureTest;
 import osm.model.Patient;
+import osm.repository.PatientRepository;
 
 public class PatientTable extends VBox implements TableController {
-	private ObservableList<Patient> data = FXCollections.observableArrayList(
-			new Patient("Matesz", "Socha", "950314", 'M', "NFZ", null),
-			new Patient("Iza", "Plucinska", "951021", 'K', "NFZ", new BloodPressureTest()));
+	
 
 	private PatientFormController pateintForm;
 	private TestFormController testForm;
-
+	
+	private PatientRepository patients = new PatientRepository();
+	private Patient activePatient;
 	private TableView<Patient> table;
 
 	public PatientTable() {
+		
+		Label title = createTitle();
+		table = createTable();
+		Pane buttonPane = createButtonPane();
+
+		getChildren().addAll(title, table, buttonPane);
+	}
+
+
+	private Label createTitle() {
 		Label title = new Label("Pacienci");
 		title.getStyleClass().add("title-label");
-
-		table = createTable();
-
-		getChildren().addAll(title, table);
+		return title;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -57,11 +68,35 @@ public class PatientTable extends VBox implements TableController {
 			}
 		});
 
-		table.setItems(data);
+
+		table.setItems(FXCollections.observableList(patients.getPatients()));
 		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn,testColumn);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		return table;
 	}
+	
+	private Pane createButtonPane() {
+		HBox pane = new HBox();
+		Button addButton = new Button("Dodaj Pacienta");
+		addButton.setOnAction(e->{
+			testForm.clearForm();
+			pateintForm.clearForm();
+			activePatient=null;			
+		});
+		Button deleteButton = new Button("Usun Pacienta");
+		deleteButton.setOnAction(e->{
+			testForm.clearForm();
+			pateintForm.clearForm();
+			if(activePatient!=null){
+				patients.removePatientByPesel(activePatient.getPesel());
+				ObservableSet<Patient> patientsData = FXCollections.observableSet(patients.getPatients());
+				
+			}
+		});
+		pane.getChildren().addAll(addButton, deleteButton);
+		return pane;
+	}
+
 
 	@Override
 	public void addPatient(Patient patient) {

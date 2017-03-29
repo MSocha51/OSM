@@ -4,8 +4,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import osm.controller.PatientFormController;
 import osm.controller.TableController;
 import osm.model.Patient;
@@ -17,7 +15,7 @@ public class PatientForm extends GridPane implements PatientFormController { //T
 	public PatientForm(){
 		Label titleLabel = new Label("Dane pacjenta");
 		add(titleLabel, 1, 0);
-		Label nameLabel = new Label("Imiê:");
+		Label nameLabel = new Label("ImiÄ™:");
 		add(nameLabel, 1, 1);
 		TextField nameField = new TextField();
 		add(nameField, 2, 1);
@@ -29,11 +27,11 @@ public class PatientForm extends GridPane implements PatientFormController { //T
 		add(peselLabel, 1, 3);
 		TextField peselField = new TextField();
 		add(peselField , 2, 3);
-		Label sexLabel = new Label("P³eæ:");
+		Label sexLabel = new Label("PÅ‚eÄ‡:");
 		add(sexLabel, 1, 4);
 		GridPane pane = new GridPane();
 		RadioButton femaleButton = new RadioButton("Kobieta");
-		RadioButton maleButton = new RadioButton("Mê¿czyzna");
+		RadioButton maleButton = new RadioButton("MÄ™czyzna");
 		final ToggleGroup group = new ToggleGroup();
 		femaleButton.setToggleGroup(group);
 		maleButton.setToggleGroup(group);
