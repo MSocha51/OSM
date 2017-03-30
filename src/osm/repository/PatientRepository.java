@@ -1,6 +1,7 @@
 package osm.repository;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,12 +23,19 @@ public class PatientRepository {
 				));
 	}
 
-	public Set<Patient> getPatients() {
+	public Collection<Patient> getPatients() {
 		return patients;
 	}
 
 	public void addPateint(Patient patient) {
 		patients.add(patient);
+	}
+	
+	public void changePateintOrAddByPesel(final String pesel,Patient patient){
+		Patient changedPatient = getPatientByPeselAndRemove(pesel).orElse(patient);
+		changedPatient.copyPropertiesWitoutTest(patient);
+		addPateint(changedPatient);
+		
 	}
 
 	public Optional<Patient> getPatientByPesel(final String pesel) {
@@ -36,5 +44,11 @@ public class PatientRepository {
 
 	public void removePatientByPesel(final String pesel) {
 		patients = patients.stream().filter(p -> !p.getPesel().equals(pesel)).collect(Collectors.toSet());
+	}
+
+	private Optional<Patient> getPatientByPeselAndRemove(String pesel) {
+		Optional<Patient> patient = getPatientByPesel(pesel);
+		patients.remove(patient.orElse(null));
+		return patient;
 	}
 }

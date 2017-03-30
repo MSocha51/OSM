@@ -20,24 +20,23 @@ import osm.model.Patient;
 import osm.repository.PatientRepository;
 
 public class PatientTable extends VBox implements TableController {
-	
 
 	private PatientFormController pateintForm;
 	private TestFormController testForm;
-	
+
 	private PatientRepository patients = new PatientRepository();
 	private Patient activePatient;
 	private TableView<Patient> table;
 
 	public PatientTable() {
-		
+
 		Label title = createTitle();
 		table = createTable();
+		reloadTable(table);
 		Pane buttonPane = createButtonPane();
 
 		getChildren().addAll(title, table, buttonPane);
 	}
-
 
 	private Label createTitle() {
 		Label title = new Label("Pacienci");
@@ -68,40 +67,53 @@ public class PatientTable extends VBox implements TableController {
 			}
 		});
 
-
-		table.setItems(FXCollections.observableList(patients.getPatients()));
-		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn,testColumn);
+		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn, testColumn);
+		table.setOnMouseClicked(e -> {
+			Patient selectedPatient = table.getSelectionModel().getSelectedItem();
+			if (selectedPatient != null)
+				activePatient = selectedPatient;
+		});
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		return table;
 	}
-	
+
 	private Pane createButtonPane() {
 		HBox pane = new HBox();
 		Button addButton = new Button("Dodaj Pacienta");
-		addButton.setOnAction(e->{
+		addButton.setOnAction(e -> {
 			testForm.clearForm();
 			pateintForm.clearForm();
-			activePatient=null;			
+			activePatient = null;
 		});
-		Button deleteButton = new Button("Usun Pacienta");
-		deleteButton.setOnAction(e->{
+		Button deleteButton = new Button("Usuń Pacienta");
+		deleteButton.setOnAction(e -> {
 			testForm.clearForm();
 			pateintForm.clearForm();
-			if(activePatient!=null){
+			if (activePatient != null) {
 				patients.removePatientByPesel(activePatient.getPesel());
-				ObservableSet<Patient> patientsData = FXCollections.observableSet(patients.getPatients());
-				
+				reloadTable(table);
 			}
 		});
-		pane.getChildren().addAll(addButton, deleteButton);
+		Button changeButton = new Button("Zamień");
+		changeButton.setOnAction(e->{
+			addPatient(new Patient("Ktoś","Jakiś",""+(int) (Math.random()*1000),'M',"Prywatne",null));
+		});
+		pane.getChildren().addAll(addButton, deleteButton,changeButton);
 		return pane;
 	}
-
+	
+	private void reloadTable(TableView<Patient> tableToReload){
+		tableToReload.setItems(FXCollections.observableArrayList(patients.getPatients()));
+	}
 
 	@Override
 	public void addPatient(Patient patient) {
-		// TODO Auto-generated method stub
-
+		if(activePatient != null) {
+			patients.changePateintOrAddByPesel(activePatient.getPesel(), patient);
+		}else{
+			patients.addPateint(patient);			
+		}
+		reloadTable(table);
 	}
 
 	@Override

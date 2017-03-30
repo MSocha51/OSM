@@ -25,6 +25,9 @@ public class Patient {
 		this.bloodPressureTest=test;
 	}
 
+	public Patient() {
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -54,7 +57,7 @@ public class Patient {
 	}
 	public void setSex(Character sex) throws IllegalArgumentException {
 		if (sex != null) {
-			if (sex.equals('M') || sex.equals('F'))
+			if ((!sex.equals('M')) && (!sex.equals('F')))
 				throw new IllegalArgumentException("Wrong sex: " + sex);
 		}
 		this.sex = sex;
@@ -129,6 +132,14 @@ public class Patient {
 	public String toString() {
 		return "Patient [name=" + name + ", surname=" + surname + ", pesel=" + pesel + ", sex=" + sex + ", insurance="
 				+ insurance + "]";
+	}
+
+	public void copyPropertiesWitoutTest(Patient patient) {
+		this.setName(patient.getName());
+		this.setSurname(patient.getSurname());
+		this.setPesel(patient.getPesel());
+		this.setSex(patient.getSex());
+		this.setInsurance(patient.getInsurance());
 	}
 
 }
