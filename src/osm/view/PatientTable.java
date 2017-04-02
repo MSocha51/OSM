@@ -69,11 +69,9 @@ public class PatientTable extends VBox implements PatientTableView {
 	private Pane createButtonPane() {
 		HBox pane = new HBox();
 		addButton = new Button("Dodaj Pacienta");
-		addButton.addEventHandler(ActionEvent.ACTION,tableController);
-		addButton.addEventHandler(ActionEvent.ACTION,e-> table.getSelectionModel().select(null));		
+		addButton.setOnAction(tableController);	
 		deleteButton = new Button("Usuń Pacienta");
-		deleteButton.addEventHandler(ActionEvent.ACTION,tableController);
-		deleteButton.addEventHandler(ActionEvent.ACTION,e-> table.getSelectionModel().select(null));			
+		deleteButton.setOnAction(tableController);	
 		pane.getChildren().addAll(addButton, deleteButton);
 		return pane;
 	}
@@ -85,8 +83,11 @@ public class PatientTable extends VBox implements PatientTableView {
 	@Override
 	public Patient getActivePatient() {
 		return table.getSelectionModel().getSelectedItem();
-	}	
-
+	}
+	@Override
+	public void clearActivePatient() {
+		table.getSelectionModel().select(null);
+	}
 	public PatientTableController getTableController() {
 		return tableController;
 	}
@@ -102,8 +103,4 @@ public class PatientTable extends VBox implements PatientTableView {
 	public Button getDeleteButton() {
 		return deleteButton;
 	}
-
-	
-	
-
 }

@@ -21,11 +21,14 @@ public class PatientTableController implements EventHandler<ActionEvent> {
 		if(event.getSource()==tableView.getAddButton()){
 			patientFormView.clearForm();
 			testFormView.clearForm();
+			tableView.clearActivePatient();
 		}
 		if(event.getSource()==tableView.getDeleteButton()){
 			Patient activePatient = tableView.getActivePatient();
 			patientRepository.removePatient(activePatient);
+			tableView.clearActivePatient();
 			tableView.reloadTable(patientRepository.getPatients());
+			
 		}
 	}
 
