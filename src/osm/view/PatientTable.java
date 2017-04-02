@@ -2,10 +2,13 @@ package osm.view;
 
 import java.util.Collection;
 
+import com.sun.glass.events.MouseEvent;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,7 +63,7 @@ public class PatientTable extends VBox implements PatientTableView {
 				return new ReadOnlyObjectWrapper(param.getValue().getBloodPressureTest() == null ? "NIE" : "TAK");
 			}
 		});
-
+		table.setOnMouseClicked(e->tableController.tableClicked(e));
 		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn, testColumn);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		return table;
@@ -69,9 +72,9 @@ public class PatientTable extends VBox implements PatientTableView {
 	private Pane createButtonPane() {
 		HBox pane = new HBox();
 		addButton = new Button("Dodaj Pacienta");
-		addButton.setOnAction(tableController);	
+		addButton.addEventHandler(ActionEvent.ACTION,tableController);	
 		deleteButton = new Button("Usuń Pacienta");
-		deleteButton.setOnAction(tableController);	
+		deleteButton.addEventHandler(ActionEvent.ACTION,tableController);	
 		pane.getChildren().addAll(addButton, deleteButton);
 		return pane;
 	}
@@ -102,5 +105,9 @@ public class PatientTable extends VBox implements PatientTableView {
 
 	public Button getDeleteButton() {
 		return deleteButton;
+	}
+
+	public TableView<Patient> getTable() {
+		return table;
 	}
 }

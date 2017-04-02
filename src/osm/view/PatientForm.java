@@ -104,7 +104,7 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 	}
 
 	@Override
-	public void setPateint(Patient pateint) {
+	public void setPatient(Patient patient) {
 		// TODO Auto-generated method stub
 
 	}

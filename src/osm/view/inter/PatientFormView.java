@@ -4,6 +4,7 @@ import osm.model.Patient;
 
 public interface PatientFormView {
 	public void clearForm();
-	public void setPateint(Patient pateint);
+	public void setPatient(Patient patient);
 	public Patient getPateint();
+	public void setDisable(boolean value);
 }
