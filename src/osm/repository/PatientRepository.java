@@ -27,9 +27,17 @@ public class PatientRepository {
 		return patients;
 	}
 
-	public void addPateint(Patient patient) {
+	public void addPateint(final Patient patient) {
 		patients.add(patient);
 	}
+	public Optional<Patient> getPatientByPesel(final String pesel) {
+		return patients.stream().filter((p) -> p.getPesel().equals(pesel)).findAny();
+	}
+	public void removePatient(final Patient patient){
+		patients.remove(patient);
+	}
+	
+	//Nie uzywane
 	
 	public void changePateintOrAddByPesel(final String pesel,Patient patient){
 		Patient changedPatient = getPatientByPeselAndRemove(pesel).orElse(patient);
@@ -38,9 +46,7 @@ public class PatientRepository {
 		
 	}
 
-	public Optional<Patient> getPatientByPesel(final String pesel) {
-		return patients.stream().filter((p) -> p.getPesel().equals(pesel)).findAny();
-	}
+
 
 	public void removePatientByPesel(final String pesel) {
 		patients = patients.stream().filter(p -> !p.getPesel().equals(pesel)).collect(Collectors.toSet());

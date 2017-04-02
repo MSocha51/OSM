@@ -4,14 +4,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
-import osm.controller.PatientFormController;
-import osm.controller.TableController;
 import osm.model.Patient;
+import osm.view.inter.PatientFormView;
 
-public class PatientForm extends GridPane implements PatientFormController { //TODO change Pane type
-	
-	private TableController tableController;
-	
+public class PatientForm extends GridPane implements PatientFormView{ //TODO change Pane type
+		
 	public PatientForm(){
 		Label titleLabel = new Label("Dane pacjenta");
 		add(titleLabel, 1, 0);
@@ -51,12 +48,10 @@ public class PatientForm extends GridPane implements PatientFormController { //T
 
 	}
 
-	public TableController getTableController() {
-		return tableController;
-	}
-
-	public void setTableController(TableController table) {
-		this.tableController= table;
+	@Override
+	public Patient getPateint() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
