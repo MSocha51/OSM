@@ -5,7 +5,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import osm.controller.PatientFormController;
 import osm.controller.PatientTableController;
+import osm.controller.TestFormController;
 import osm.repository.PatientRepository;
 
 public class MainWindow extends Application{
@@ -15,7 +17,8 @@ public class MainWindow extends Application{
 	private PatientTable patientTable;
 	
 	private PatientTableController patientTableController;
-	
+	private PatientFormController patientFormController;
+	private TestFormController testFormController;
 	private PatientRepository pateintRepository;
 
 	
@@ -45,13 +48,15 @@ public class MainWindow extends Application{
 	}
 	private void createControllers() {
 		patientTableController = new PatientTableController();
+		patientFormController =new PatientFormController();
+		testFormController =new TestFormController();
 		
 	}	
 
 
 	private void createTies(){
-		testForm = new TestForm();
-		patientForm = new PatientForm();
+		testForm = new TestForm(testFormController);
+		patientForm = new PatientForm(patientFormController);
 		patientTable = new PatientTable(patientTableController);
 	}
 	
@@ -65,6 +70,15 @@ public class MainWindow extends Application{
 		patientTableController.setPatientRepository(pateintRepository);
 		patientTableController.setPatientFormView(patientForm);
 		patientTableController.setTestFormView(testForm);
+		
+		testFormController.setPatientForm(patientForm);
+		testFormController.setPatientTable(patientTable);
+		testFormController.setTestForm(testForm);
+		
+		patientFormController.setPatientForm(patientForm);
+		patientFormController.setPatientTable(patientTable);
+		patientFormController.setTestForm(testForm);
+		
 		
 	}
 }

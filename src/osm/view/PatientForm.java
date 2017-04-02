@@ -1,6 +1,7 @@
 package osm.view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -10,19 +11,30 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import osm.controller.PatientFormController;
 import osm.model.Patient;
 import osm.view.inter.PatientFormView;
 
 public class PatientForm extends GridPane implements PatientFormView{ //TODO change Pane type
-		
-	public PatientForm(){
+	private PatientFormController patientFormController;
+	private Button cancelButton;
+	private Button saveButton;
+	private TextField nameField;
+	private TextField surnameField;
+	private TextField peselField;
+	private RadioButton femaleButton;
+	private RadioButton maleButton;
+	private ChoiceBox<String> insuranceBox;
+	
+	public PatientForm(PatientFormController patientFormController){
+		this.patientFormController=patientFormController;
 		Label titleLabel = new Label("Dane pacjenta");
 		add(titleLabel, 1, 0);		
 		createTextFields();
 		createSexFields();
 		createInsuranceFields();
 		createButtons();
-	
+		
 		setHgap(10); 
 		setVgap(10); 
 		setPadding(new Insets(10, 10, 10, 10));
@@ -31,19 +43,21 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 	
 	private void createButtons() {
 		GridPane buttonPane = new GridPane();
-		Button saveButton = new Button("Zapisz");
+		saveButton = new Button("Zapisz");
 		buttonPane.add(saveButton,1,0);
-		Button cancelButton = new Button("Anuluj");
+		cancelButton = new Button("Anuluj");
 		buttonPane.add(cancelButton,2,0);
 		buttonPane.setHgap(10);
 		add(buttonPane, 2, 6);	
+		cancelButton.addEventHandler(ActionEvent.ACTION, patientFormController);
+		saveButton.addEventHandler(ActionEvent.ACTION, patientFormController);
 	}
 
 
 	private void createInsuranceFields() {
 		Label insuranceLabel = new Label("Ubezpieczenie:");
 		add(insuranceLabel, 1, 5);
-		ChoiceBox<String> insuranceBox = new ChoiceBox<>(FXCollections.observableArrayList(
+		insuranceBox = new ChoiceBox<>(FXCollections.observableArrayList(
 				"NFZ", "Prywatne", "Brak")
 			);
 		add(insuranceBox, 2, 5);	
@@ -54,8 +68,8 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 		Label sexLabel = new Label("Płeć:");
 		add(sexLabel, 1, 4);
 		GridPane sexPane = new GridPane();
-		RadioButton femaleButton = new RadioButton("Kobieta");
-		RadioButton maleButton = new RadioButton("Mężczyzna");
+		femaleButton = new RadioButton("Kobieta");
+		maleButton = new RadioButton("Mężczyzna");
 		final ToggleGroup group = new ToggleGroup();
 		femaleButton.setToggleGroup(group);
 		maleButton.setToggleGroup(group);
@@ -68,23 +82,25 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 	private void createTextFields() {
 		Label nameLabel = new Label("Imię:");
 		add(nameLabel, 1, 1);
-		TextField nameField = new TextField();
+		nameField = new TextField();
 		add(nameField, 2, 1);
 		Label surnameLabel = new Label("Nazwisko:");
 		add(surnameLabel, 1, 2);
-		TextField surnameField = new TextField();
+		surnameField = new TextField();
 		add(surnameField, 2, 2);
 		Label peselLabel = new Label("PESEL:");
 		add(peselLabel, 1, 3);
-		TextField peselField = new TextField();
+		peselField = new TextField();
 		add(peselField , 2, 3);
 	}
 
 
 	@Override
 	public void clearForm() {
-		// TODO Auto-generated method stub
-
+		setInputs(null,null,null);
+		maleButton.setSelected(false);
+		femaleButton.setSelected(false);
+		insuranceBox.getSelectionModel().clearSelection();
 	}
 
 	@Override
@@ -92,11 +108,26 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 		// TODO Auto-generated method stub
 
 	}
+	private void setInputs(String name, String surname, String pesel ){
+		nameField.setText(name);
+		surnameField.setText(surname);
+		peselField.setText(pesel);
+	}
 
 	@Override
 	public Patient getPateint() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public Button getCancelButton() {
+		return cancelButton;
+	}
+
+
+	public Button getSaveButton() {
+		return saveButton;
 	}
 	
 	
