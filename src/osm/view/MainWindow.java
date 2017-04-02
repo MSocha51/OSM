@@ -5,6 +5,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import osm.controller.PatientTableController;
+import osm.repository.PatientRepository;
 
 public class MainWindow extends Application{
 	
@@ -12,18 +14,10 @@ public class MainWindow extends Application{
 	private PatientForm patientForm;
 	private PatientTable patientTable;
 	
-	private void createTies(){
-		testForm = new TestForm();
-		patientForm = new PatientForm();
-		patientTable = new PatientTable();
-	}
+	private PatientTableController patientTableController;
 	
-	private void injectDependancy() {
-		testForm.setTableController(patientTable);
-		patientForm.setTableController(patientTable);		
-		patientTable.setPateintForm(patientForm);
-		patientTable.setTestForm(testForm);
-	}
+	private PatientRepository pateintRepository;
+
 	
 	static public void main(String args[]){
 		launch(args);
@@ -31,7 +25,9 @@ public class MainWindow extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		createTies();
+		createControllers();
+		createTies();		
+		createRepository();
 		injectDependancy();
 		GridPane root = new GridPane();
 		root.setHgap(10);
@@ -46,6 +42,30 @@ public class MainWindow extends Application{
 		scene.getStylesheets().add
 		 (MainWindow.class.getResource("/Style.css").toExternalForm());
 		primaryStage.show();		
+	}
+	private void createControllers() {
+		patientTableController = new PatientTableController();
+		
+	}	
+
+
+	private void createTies(){
+		testForm = new TestForm();
+		patientForm = new PatientForm();
+		patientTable = new PatientTable(patientTableController);
+	}
+	
+	private void createRepository() {
+		pateintRepository = new PatientRepository();
+		
+	}
+	
+	private void injectDependancy() {
+		patientTableController.setTableView(patientTable);
+		patientTableController.setPatientRepository(pateintRepository);
+		patientTableController.setPatientFormView(patientForm);
+		patientTableController.setTestFormView(testForm);
+		
 	}
 }
 

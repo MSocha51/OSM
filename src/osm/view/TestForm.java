@@ -7,13 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import osm.controller.TableController;
-import osm.controller.TestFormController;
 import osm.model.BloodPressureTest;
+import osm.view.inter.TestFormView;
 
-public class TestForm extends GridPane implements TestFormController { //TODO change Pane type
+public class TestForm extends GridPane implements TestFormView { //TODO change Pane type
 	
-	private TableController tableController;
 
 	public TestForm(){
 		Label titleLabel = new Label("Badanie");
@@ -67,12 +65,10 @@ public class TestForm extends GridPane implements TestFormController { //TODO ch
 
 	}
 
-	public TableController getTableController() {
-		return tableController;
-	}
-
-	public void setTableController(TableController tableController) {
-		this.tableController = tableController;
+	@Override
+	public BloodPressureTest getTest() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

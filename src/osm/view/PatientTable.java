@@ -1,44 +1,48 @@
 package osm.view;
 
+import java.util.Collection;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import osm.controller.PatientFormController;
-import osm.controller.TableController;
-import osm.controller.TestFormController;
-import osm.model.BloodPressureTest;
+import osm.controller.PatientTableController;
 import osm.model.Patient;
+import osm.view.inter.PatientTableView;
 
-public class PatientTable extends VBox implements TableController {
-	private ObservableList<Patient> data = FXCollections.observableArrayList(
-			new Patient("Matesz", "Socha", "950314", 'M', "NFZ", null),
-			new Patient("Iza", "Plucinska", "951021", 'K', "NFZ", new BloodPressureTest()));
-
-	private PatientFormController pateintForm;
-	private TestFormController testForm;
-
+public class PatientTable extends VBox implements PatientTableView {
+	
+	private PatientTableController tableController;
 	private TableView<Patient> table;
+	
+	private Button addButton;
+	private Button deleteButton;
 
-	public PatientTable() {
+	public PatientTable(PatientTableController tableController) {
+		this.tableController=tableController;
+		Label title = createTitle();
+		table = createTable();
+		Pane buttonPane = createButtonPane();
+		getChildren().addAll(title, table, buttonPane);
+	}
+
+	private Label createTitle() {
 		Label title = new Label("Pacienci");
 		title.getStyleClass().add("title-label");
-
-		table = createTable();
-
-		getChildren().addAll(title, table);
+		return title;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private TableView<Patient> createTable() {
 		TableView<Patient> table = new TableView<>();
 		table.setEditable(false);
-
 		TableColumn nameColumn = new TableColumn("Imię");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
 		TableColumn surnameColumn = new TableColumn("Nazwisko");
@@ -57,38 +61,49 @@ public class PatientTable extends VBox implements TableController {
 			}
 		});
 
-		table.setItems(data);
-		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn,testColumn);
+		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn, testColumn);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		return table;
 	}
 
-	@Override
-	public void addPatient(Patient patient) {
-		// TODO Auto-generated method stub
-
+	private Pane createButtonPane() {
+		HBox pane = new HBox();
+		addButton = new Button("Dodaj Pacienta");
+		addButton.addEventHandler(ActionEvent.ACTION,tableController);
+		addButton.addEventHandler(ActionEvent.ACTION,e-> table.getSelectionModel().select(null));		
+		deleteButton = new Button("Usuń Pacienta");
+		deleteButton.addEventHandler(ActionEvent.ACTION,tableController);
+		deleteButton.addEventHandler(ActionEvent.ACTION,e-> table.getSelectionModel().select(null));			
+		pane.getChildren().addAll(addButton, deleteButton);
+		return pane;
 	}
 
 	@Override
-	public void addTest(BloodPressureTest test) {
-		// TODO Auto-generated method stub
+	public void reloadTable(Collection<Patient> patients) {
+		table.setItems(FXCollections.observableArrayList(patients));
+	}
+	@Override
+	public Patient getActivePatient() {
+		return table.getSelectionModel().getSelectedItem();
+	}	
 
+	public PatientTableController getTableController() {
+		return tableController;
 	}
 
-	public PatientFormController getPateintForm() {
-		return pateintForm;
+	public void setTableController(PatientTableController tableController) {
+		this.tableController = tableController;
 	}
 
-	public void setPateintForm(PatientFormController pateintForm) {
-		this.pateintForm = pateintForm;
+	public Button getAddButton() {
+		return addButton;
 	}
 
-	public TestFormController getTestForm() {
-		return testForm;
+	public Button getDeleteButton() {
+		return deleteButton;
 	}
 
-	public void setTestForm(TestFormController testForm) {
-		this.testForm = testForm;
-	}
+	
+	
 
 }

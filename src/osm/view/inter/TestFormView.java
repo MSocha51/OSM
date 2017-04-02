@@ -1,8 +1,9 @@
-package osm.controller;
+package osm.view.inter;
 
 import osm.model.BloodPressureTest;
 
-public interface TestFormController {
+public interface TestFormView {
 	public void clearForm();
 	public void setTest(BloodPressureTest test);
+	public BloodPressureTest getTest();
 }
