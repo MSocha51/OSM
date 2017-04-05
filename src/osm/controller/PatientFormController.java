@@ -2,6 +2,8 @@ package osm.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import osm.model.Patient;
+import osm.repository.PatientRepository;
 import osm.view.PatientForm;
 import osm.view.TestForm;
 import osm.view.inter.PatientTableView;
@@ -12,12 +14,23 @@ public class PatientFormController implements EventHandler<ActionEvent> {
 	private PatientForm patientForm;
 	private PatientTableView patientTable;
 	private TestFormView testForm;
+	private PatientRepository patientRepo;
+	
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource()==patientForm.getCancelButton()){
 			patientForm.clearForm();
 			patientTable.clearActivePatient();
 			testForm.clearForm();
+		}
+		if (event.getSource()==patientForm.getSaveButton()){			
+			Patient patient = patientForm.getPatient();
+			Patient selectedPatient = patientTable.getActivePatient();
+			if(selectedPatient != null)			
+				patientRepo.removePatient(selectedPatient);			
+			patientRepo.addPateint(patient);
+			patientTable.reloadTable(patientRepo.getPatients());
+			patientTable.setActivePatient(patient);
 		}
 		
 	}
@@ -38,6 +51,12 @@ public class PatientFormController implements EventHandler<ActionEvent> {
 	}
 	public void setTestForm(TestFormView testForm) {
 		this.testForm = testForm;
+	}
+	public PatientRepository getPatientRepository() {
+		return patientRepo;
+	}
+	public void setPatientRepository(PatientRepository patientRepo) {
+		this.patientRepo = patientRepo;
 	}
 	
 

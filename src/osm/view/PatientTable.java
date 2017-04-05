@@ -91,6 +91,10 @@ public class PatientTable extends VBox implements PatientTableView {
 	public void clearActivePatient() {
 		table.getSelectionModel().select(null);
 	}
+	@Override
+	public void setActivePatient(Patient patient) {
+		table.getSelectionModel().select(patient);		
+	}
 	public PatientTableController getTableController() {
 		return tableController;
 	}
@@ -110,4 +114,6 @@ public class PatientTable extends VBox implements PatientTableView {
 	public TableView<Patient> getTable() {
 		return table;
 	}
+
+
 }

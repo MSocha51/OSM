@@ -1,6 +1,5 @@
 package osm.controller;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -8,7 +7,6 @@ import osm.model.Patient;
 import osm.repository.PatientRepository;
 import osm.view.PatientTable;
 import osm.view.inter.PatientFormView;
-import osm.view.inter.PatientTableView;
 import osm.view.inter.TestFormView;
 
 public class PatientTableController implements EventHandler<Event>{

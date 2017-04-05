@@ -19,7 +19,7 @@ public class MainWindow extends Application{
 	private PatientTableController patientTableController;
 	private PatientFormController patientFormController;
 	private TestFormController testFormController;
-	private PatientRepository pateintRepository;
+	private PatientRepository patientRepository;
 
 	
 	static public void main(String args[]){
@@ -61,13 +61,13 @@ public class MainWindow extends Application{
 	}
 	
 	private void createRepository() {
-		pateintRepository = new PatientRepository();
+		patientRepository = new PatientRepository();
 		
 	}
 	
 	private void injectDependancy() {
 		patientTableController.setTableView(patientTable);
-		patientTableController.setPatientRepository(pateintRepository);
+		patientTableController.setPatientRepository(patientRepository);
 		patientTableController.setPatientFormView(patientForm);
 		patientTableController.setTestFormView(testForm);
 		
@@ -78,6 +78,7 @@ public class MainWindow extends Application{
 		patientFormController.setPatientForm(patientForm);
 		patientFormController.setPatientTable(patientTable);
 		patientFormController.setTestForm(testForm);
+		patientFormController.setPatientRepository(patientRepository);
 		
 		
 	}
