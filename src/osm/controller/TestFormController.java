@@ -2,6 +2,7 @@ package osm.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import osm.model.BloodPressureTest;
 import osm.view.PatientForm;
 import osm.view.TestForm;
 import osm.view.inter.PatientFormView;
@@ -16,10 +17,16 @@ public class TestFormController implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent event) {
 		if (event.getSource()==testForm.getCancelButton()){
 			patientForm.clearForm();
+			patientForm.setDisable(true);
 			patientTable.clearActivePatient();
 			testForm.clearForm();
+			testForm.setDisable(true);
 		}
-		
+		if(event.getSource()==testForm.getSaveButton()){
+			BloodPressureTest test = testForm.getTest();
+			patientTable.getActivePatient().setBloodPressureTest(test);
+			patientTable.refresh();
+		}
 	}
 	public TestForm getTestForm() {
 		return testForm;

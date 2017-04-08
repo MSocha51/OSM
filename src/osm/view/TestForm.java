@@ -14,7 +14,8 @@ import osm.controller.TestFormController;
 import osm.model.BloodPressureTest;
 import osm.view.inter.TestFormView;
 
-public class TestForm extends GridPane implements TestFormView { //TODO change Pane type
+public class TestForm extends GridPane implements TestFormView { // TODO change
+																	// Pane type
 	private TestFormController testFormController;
 	private Button cancelButton;
 	private Button saveButton;
@@ -22,20 +23,20 @@ public class TestForm extends GridPane implements TestFormView { //TODO change P
 	private TextField diastoleField;
 	private DatePicker datePicker;
 
-	public TestForm(TestFormController testFormController){
+	public TestForm(TestFormController testFormController) {
 		this.testFormController = testFormController;
 		Label titleLabel = new Label("Badanie");
 		add(titleLabel, 1, 0);
-		
+
 		createDateFields();
 		createPreassureFields();
 		createButtons();
-		
-		setHgap(10); 
-		setVgap(10); 
+
+		setHgap(10);
+		setVgap(10);
 		setPadding(new Insets(10, 10, 10, 10));
 	}
-	
+
 	private void createPreassureFields() {
 		Label systoleLabel = new Label("Ciśnienie skurczowe:");
 		add(systoleLabel, 1, 2);
@@ -51,41 +52,46 @@ public class TestForm extends GridPane implements TestFormView { //TODO change P
 		Label dateLabel = new Label("Data:");
 		add(dateLabel, 1, 1);
 		datePicker = new DatePicker();
-		add(datePicker, 2, 1);	
+		add(datePicker, 2, 1);
 	}
 
 	private void createButtons() {
 		GridPane buttonPane = new GridPane();
 		saveButton = new Button("Zapisz");
-		buttonPane.add(saveButton,1,0);
+		buttonPane.add(saveButton, 1, 0);
 		cancelButton = new Button("Anuluj");
-		buttonPane.add(cancelButton,2,0);
+		buttonPane.add(cancelButton, 2, 0);
 		buttonPane.setHgap(10);
 		add(buttonPane, 2, 4);
 		cancelButton.addEventHandler(ActionEvent.ACTION, testFormController);
 		saveButton.addEventHandler(ActionEvent.ACTION, testFormController);
 	}
-	private void setInputs(String systole, String diastole, LocalDate date ){
+
+	private void setInputs(String systole, String diastole, LocalDate date) {
 		systoleField.setText(systole);
 		diastoleField.setText(diastole);
 		datePicker.setValue(date);
 	}
+
 	@Override
 	public void clearForm() {
-		setInputs(null,null,null);
+		setInputs(null, null, null);
 
 	}
 
 	@Override
 	public void setTest(BloodPressureTest test) {
-		// TODO Auto-generated method stub
+		setInputs(test.getSystole().toString(), test.getDiastole().toString(), test.getDate());
 
 	}
 
 	@Override
 	public BloodPressureTest getTest() {
-		// TODO Auto-generated method stub
-		return null;
+		BloodPressureTest test = new BloodPressureTest();
+		test.setSystole(Integer.parseInt(systoleField.getText()));
+		test.setDiastole(Integer.parseInt(diastoleField.getText()));
+		test.setDate(datePicker.getValue());
+		return test;
 	}
 
 	public Button getCancelButton() {
@@ -95,7 +101,5 @@ public class TestForm extends GridPane implements TestFormView { //TODO change P
 	public Button getSaveButton() {
 		return saveButton;
 	}
-	
-	
 
 }

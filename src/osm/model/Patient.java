@@ -57,7 +57,7 @@ public class Patient {
 	}
 	public void setSex(Character sex) throws IllegalArgumentException {
 		if (sex != null) {
-			if ((!sex.equals('M')) && (!sex.equals('F')))
+			if ((!sex.equals('M')) && (!sex.equals('K')))
 				throw new IllegalArgumentException("Wrong sex: " + sex);
 		}
 		this.sex = sex;

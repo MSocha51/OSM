@@ -8,4 +8,5 @@ public interface PatientTableView {
 	public Patient getActivePatient();
 	public void clearActivePatient();
 	public void setActivePatient(Patient patient);
+	public void refresh();
 }

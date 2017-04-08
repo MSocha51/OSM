@@ -95,6 +95,10 @@ public class PatientTable extends VBox implements PatientTableView {
 	public void setActivePatient(Patient patient) {
 		table.getSelectionModel().select(patient);		
 	}
+	@Override
+	public void refresh(){
+		table.refresh();
+	}
 	public PatientTableController getTableController() {
 		return tableController;
 	}

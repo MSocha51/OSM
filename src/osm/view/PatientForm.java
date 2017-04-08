@@ -137,7 +137,7 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 		patient.setName(nameField.getText());
 		patient.setSurname(surnameField.getText());
 		patient.setPesel(peselField.getText());
-		Character sex = femaleButton.isSelected()? 'F' :
+		Character sex = femaleButton.isSelected()? 'K' :
 						maleButton.isSelected()  ? 'M' :
 						' ';
 		patient.setSex(sex);
