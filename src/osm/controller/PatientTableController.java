@@ -1,6 +1,5 @@
 package osm.controller;
 
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -8,42 +7,45 @@ import osm.model.Patient;
 import osm.repository.PatientRepository;
 import osm.view.PatientTable;
 import osm.view.inter.PatientFormView;
-import osm.view.inter.PatientTableView;
 import osm.view.inter.TestFormView;
 
-public class PatientTableController implements EventHandler<Event>{
-	
+public class PatientTableController implements EventHandler<Event> {
+
 	private PatientTable tableView;
 	private PatientFormView patientFormView;
 	private TestFormView testFormView;
 	private PatientRepository patientRepository;
-	
+
 	@Override
 	public void handle(Event event) {
-		if(event.getSource()==tableView.getAddButton()){
+		if (event.getSource() == tableView.getAddButton()) {
 			patientFormView.clearForm();
 			testFormView.clearForm();
 			tableView.clearActivePatient();
 			patientFormView.setDisable(false);
 			testFormView.setDisable(true);
 		}
-		if(event.getSource()==tableView.getDeleteButton()){
+		if (event.getSource() == tableView.getDeleteButton()) {
 			Patient activePatient = tableView.getActivePatient();
 			patientRepository.removePatient(activePatient);
 			tableView.clearActivePatient();
 			tableView.reloadTable(patientRepository.getPatients());
 			testFormView.setDisable(true);
-			patientFormView.setDisable(true);			
+			patientFormView.setDisable(true);
 		}
 	}
-	
+
 	public void tableClicked(MouseEvent e) {
 		Patient patient = tableView.getTable().getSelectionModel().getSelectedItem();
-		if(patient != null){
+		if (patient != null) {
 			patientFormView.setPatient(patient);
-			testFormView.setTest(patient.getBloodPressureTest());
+			if (patient.getBloodPressureTest() != null)
+				testFormView.setTest(patient.getBloodPressureTest());
+			else{
+				testFormView.clearForm();
+			}
 			testFormView.setDisable(false);
-			patientFormView.setDisable(false);	
+			patientFormView.setDisable(false);
 		}
 	}
 
@@ -78,9 +80,5 @@ public class PatientTableController implements EventHandler<Event>{
 	public void setPatientRepository(PatientRepository patientRepository) {
 		this.patientRepository = patientRepository;
 	}
-
-
-	
-	
 
 }

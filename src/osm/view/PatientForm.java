@@ -19,11 +19,14 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 	private PatientFormController patientFormController;
 	private Button cancelButton;
 	private Button saveButton;
+	
 	private TextField nameField;
 	private TextField surnameField;
 	private TextField peselField;
+	
 	private RadioButton femaleButton;
 	private RadioButton maleButton;
+	
 	private ChoiceBox<String> insuranceBox;
 	
 	public PatientForm(PatientFormController patientFormController){
@@ -105,7 +108,21 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 
 	@Override
 	public void setPatient(Patient patient) {
-		// TODO Auto-generated method stub
+		setInputs(patient.getName(),patient.getSurname(),patient.getPesel());
+		Character male = 'M';
+		Character female = 'K';
+		Character sex = patient.getSex();
+		if(male.equals(sex)){
+			femaleButton.setSelected(false);
+		    maleButton.setSelected(true);
+		}else if(female.equals(sex)){
+			femaleButton.setSelected(true);
+		    maleButton.setSelected(false);
+		}else{
+			femaleButton.setSelected(false);
+		    maleButton.setSelected(false);
+		}
+		insuranceBox.setValue(patient.getInsurance());
 
 	}
 	private void setInputs(String name, String surname, String pesel ){
@@ -115,9 +132,17 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 	}
 
 	@Override
-	public Patient getPateint() {
-		// TODO Auto-generated method stub
-		return null;
+	public Patient getPatient() {
+		Patient patient = new Patient();
+		patient.setName(nameField.getText());
+		patient.setSurname(surnameField.getText());
+		patient.setPesel(peselField.getText());
+		Character sex = femaleButton.isSelected()? 'K' :
+						maleButton.isSelected()  ? 'M' :
+						' ';
+		patient.setSex(sex);
+		patient.setInsurance(insuranceBox.getValue());
+		return patient;
 	}
 
 

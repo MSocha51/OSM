@@ -16,11 +16,7 @@ public class PatientRepository {
 
 	private Set<Patient> patients = new HashSet<>();
 
-	public PatientRepository(){
-		patients.addAll(Arrays.asList(
-				new Patient("Matesz", "Socha", "950314", 'M', "NFZ", null),
-				new Patient("Iza", "Plucinska", "951021", 'K', "NFZ", new BloodPressureTest())
-				));
+	public PatientRepository() {
 	}
 
 	public Collection<Patient> getPatients() {
@@ -30,23 +26,23 @@ public class PatientRepository {
 	public void addPateint(final Patient patient) {
 		patients.add(patient);
 	}
+
 	public Optional<Patient> getPatientByPesel(final String pesel) {
 		return patients.stream().filter((p) -> p.getPesel().equals(pesel)).findAny();
 	}
-	public void removePatient(final Patient patient){
+
+	public void removePatient(final Patient patient) {
 		patients.remove(patient);
 	}
-	
-	//Nie uzywane
-	
-	public void changePateintOrAddByPesel(final String pesel,Patient patient){
+
+	// Nie uzywane
+
+	public void changePateintOrAddByPesel(final String pesel, Patient patient) {
 		Patient changedPatient = getPatientByPeselAndRemove(pesel).orElse(patient);
 		changedPatient.copyPropertiesWitoutTest(patient);
 		addPateint(changedPatient);
-		
+
 	}
-
-
 
 	public void removePatientByPesel(final String pesel) {
 		patients = patients.stream().filter(p -> !p.getPesel().equals(pesel)).collect(Collectors.toSet());
