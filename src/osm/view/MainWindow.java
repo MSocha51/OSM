@@ -39,6 +39,8 @@ public class MainWindow extends Application{
 		root.add(patientForm,0,0);
 		root.add(patientTable,1,0,4,2);
 		root.add(testForm, 0, 1);
+		patientForm.setDisable(true);
+		testForm.setDisable(true);
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Badania Pacientów");
 		primaryStage.setScene(scene);
@@ -78,8 +80,7 @@ public class MainWindow extends Application{
 		patientFormController.setPatientForm(patientForm);
 		patientFormController.setPatientTable(patientTable);
 		patientFormController.setTestForm(testForm);
-		patientFormController.setPatientRepository(patientRepository);
-		
+		patientFormController.setPatientRepository(patientRepository);		
 		
 	}
 }
