@@ -1,12 +1,16 @@
 package osm.model;
 
+import java.io.Serializable;
+
 /**
  * Class that represent patient in data storage.
  * 
  * 
  *
  */
-public class Patient {
+public class Patient implements Serializable{
+
+	private static final long serialVersionUID = 6236272868861085741L;
 	private String name;
 	private String surname;
 	private String pesel;
