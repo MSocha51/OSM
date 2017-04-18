@@ -1,5 +1,6 @@
 package osm.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -8,8 +9,9 @@ import java.time.LocalDate;
  *
  *
  */
-public class BloodPressureTest {
+public class BloodPressureTest implements Serializable {
 
+	private static final long serialVersionUID = 7606293381451823624L;
 	public LocalDate date;
 	public Integer systole; // skurczowe
 	public Integer diastole; // rozkurczowe

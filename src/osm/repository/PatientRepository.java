@@ -1,5 +1,13 @@
 package osm.repository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,9 +22,29 @@ import osm.model.Patient;
 
 public class PatientRepository {
 
-	private Set<Patient> patients = new HashSet<>();
+	private Set<Patient> patients;
 
 	public PatientRepository() {
+		
+		try {
+			File file = new File("./resources/patients");
+			ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
+			Object object = input.readObject();
+			if(object instanceof HashSet){
+				patients = (HashSet) object;
+				input.close();
+			}
+			else{
+				input.close();
+				throw new IOException("Nie udało się odczytać pacientów");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			patients = new HashSet<>();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public Collection<Patient> getPatients() {
@@ -52,5 +80,13 @@ public class PatientRepository {
 		Optional<Patient> patient = getPatientByPesel(pesel);
 		patients.remove(patient.orElse(null));
 		return patient;
+	}
+
+	public void persist() throws FileNotFoundException, IOException {		
+			File file = new File("./resources/patients.");
+			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
+			output.writeObject(patients);
+			output.flush();
+			output.close();
 	}
 }
