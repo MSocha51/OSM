@@ -31,7 +31,7 @@ public class PatientRepository {
 			ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
 			Object object = input.readObject();
 			if(object instanceof HashSet){
-				patients = (HashSet) object;
+				patients = (Set) object;
 				input.close();
 			}
 			else{

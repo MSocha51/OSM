@@ -32,6 +32,8 @@ public class PatientTableController implements EventHandler<Event> {
 			tableView.reloadTable(patientRepository.getPatients());
 			testFormView.setDisable(true);
 			patientFormView.setDisable(true);
+			testFormView.clearForm();
+			patientFormView.clearForm();
 		}
 	}
 
