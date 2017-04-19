@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import osm.model.Patient;
 import osm.repository.PatientRepository;
+import osm.validator.PatientValidator;
 import osm.view.PatientForm;
 import osm.view.TestForm;
 import osm.view.inter.PatientTableView;
@@ -27,17 +28,21 @@ public class PatientFormController implements EventHandler<ActionEvent> {
 		}
 		if (event.getSource() == patientForm.getSaveButton()) {
 			Patient patient = patientForm.getPatient();
-			Patient selectedPatient = patientTable.getActivePatient();
-			if (selectedPatient != null) {
-				patientRepo.removePatient(selectedPatient);
-				patient.setBloodPressureTest(selectedPatient.getBloodPressureTest());
+			if(PatientValidator.valid(patient)){
+				Patient selectedPatient = patientTable.getActivePatient();
+				if (selectedPatient != null) {
+					patientRepo.removePatient(selectedPatient);
+					patient.setBloodPressureTest(selectedPatient.getBloodPressureTest());
+				}
+				patientRepo.addPateint(patient);
+				patientTable.reloadTable(patientRepo.getPatients());
+				patientTable.setActivePatient(patient);
+				testForm.setDisable(false);
+				if (patient.getBloodPressureTest() != null)
+					testForm.setTest(patient.getBloodPressureTest());
+			}else{
+				System.out.println("Mamy problem");
 			}
-			patientRepo.addPateint(patient);
-			patientTable.reloadTable(patientRepo.getPatients());
-			patientTable.setActivePatient(patient);
-			testForm.setDisable(false);
-			if (patient.getBloodPressureTest() != null)
-				testForm.setTest(patient.getBloodPressureTest());
 		}
 
 	}
