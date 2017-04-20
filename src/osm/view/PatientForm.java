@@ -1,4 +1,5 @@
 package osm.view;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,61 +12,56 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import osm.controller.PatientFormController;
 import osm.model.Patient;
 import osm.view.inter.PatientFormView;
 
-public class PatientForm extends GridPane implements PatientFormView{ //TODO change Pane type
+public class PatientForm extends GridPane implements PatientFormView {
 	private PatientFormController patientFormController;
 	private Button cancelButton;
 	private Button saveButton;
-	
+
 	private TextField nameField;
 	private TextField surnameField;
 	private TextField peselField;
-	
+
 	private RadioButton femaleButton;
 	private RadioButton maleButton;
-	
+
 	private ChoiceBox<String> insuranceBox;
-	
-	public PatientForm(PatientFormController patientFormController){
-		this.patientFormController=patientFormController;
+	private Text messageText;
+
+	public PatientForm(PatientFormController patientFormController) {
+		this.patientFormController = patientFormController;
 		Label titleLabel = new Label("Dane pacjenta");
-		add(titleLabel, 1, 0);		
+		add(titleLabel, 1, 0);
 		createTextFields();
 		createSexFields();
 		createInsuranceFields();
 		createButtons();
-		
-		setHgap(10); 
-		setVgap(10); 
+		createMessageText();
+
+		setHgap(10);
+		setVgap(10);
 		setPadding(new Insets(10, 10, 10, 10));
 	}
-	
-	
-	private void createButtons() {
-		GridPane buttonPane = new GridPane();
-		saveButton = new Button("Zapisz");
-		buttonPane.add(saveButton,1,0);
-		cancelButton = new Button("Anuluj");
-		buttonPane.add(cancelButton,2,0);
-		buttonPane.setHgap(10);
-		add(buttonPane, 2, 6);	
-		cancelButton.addEventHandler(ActionEvent.ACTION, patientFormController);
-		saveButton.addEventHandler(ActionEvent.ACTION, patientFormController);
+
+	private void createTextFields() {
+		Label nameLabel = new Label("Imię:");
+		add(nameLabel, 1, 1);
+		nameField = new TextField();
+		add(nameField, 2, 1);
+		Label surnameLabel = new Label("Nazwisko:");
+		add(surnameLabel, 1, 2);
+		surnameField = new TextField();
+		add(surnameField, 2, 2);
+		Label peselLabel = new Label("PESEL:");
+		add(peselLabel, 1, 3);
+		peselField = new TextField();
+		add(peselField, 2, 3);
 	}
-
-
-	private void createInsuranceFields() {
-		Label insuranceLabel = new Label("Ubezpieczenie:");
-		add(insuranceLabel, 1, 5);
-		insuranceBox = new ChoiceBox<>(FXCollections.observableArrayList(
-				"NFZ", "Prywatne", "Brak")
-			);
-		add(insuranceBox, 2, 5);	
-	}
-
 
 	private void createSexFields() {
 		Label sexLabel = new Label("Płeć:");
@@ -81,51 +77,62 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 		add(sexPane, 2, 4);
 	}
 
-
-	private void createTextFields() {
-		Label nameLabel = new Label("Imię:");
-		add(nameLabel, 1, 1);
-		nameField = new TextField();
-		add(nameField, 2, 1);
-		Label surnameLabel = new Label("Nazwisko:");
-		add(surnameLabel, 1, 2);
-		surnameField = new TextField();
-		add(surnameField, 2, 2);
-		Label peselLabel = new Label("PESEL:");
-		add(peselLabel, 1, 3);
-		peselField = new TextField();
-		add(peselField , 2, 3);
+	private void createInsuranceFields() {
+		Label insuranceLabel = new Label("Ubezpieczenie:");
+		add(insuranceLabel, 1, 5);
+		insuranceBox = new ChoiceBox<>(FXCollections.observableArrayList("NFZ", "Prywatne", "Brak"));
+		add(insuranceBox, 2, 5);
 	}
 
+	private void createButtons() {
+		GridPane buttonPane = new GridPane();
+		saveButton = new Button("Zapisz");
+		buttonPane.add(saveButton, 1, 0);
+		cancelButton = new Button("Anuluj");
+		buttonPane.add(cancelButton, 2, 0);
+		buttonPane.setHgap(10);
+		add(buttonPane, 2, 6);
+		cancelButton.addEventHandler(ActionEvent.ACTION, patientFormController);
+		saveButton.addEventHandler(ActionEvent.ACTION, patientFormController);
+	}
+	
+	private void createMessageText(){
+		messageText = new Text();
+		messageText.setText("");
+		add(messageText,1,7);
+	}
 
 	@Override
 	public void clearForm() {
-		setInputs(null,null,null);
+		setInputs(null, null, null);
 		maleButton.setSelected(false);
 		femaleButton.setSelected(false);
 		insuranceBox.getSelectionModel().clearSelection();
+		messageText.setText("");
+		messageText.setFill(Color.BLACK);
 	}
 
 	@Override
 	public void setPatient(Patient patient) {
-		setInputs(patient.getName(),patient.getSurname(),patient.getPesel());
-		Character male = 'M';
-		Character female = 'K';
+		setInputs(patient.getName(), patient.getSurname(), patient.getPesel());
+		String male = "M";
+		String female = "K";
 		String sex = patient.getSex();
-		if(male.equals(sex)){
+		if (male.equals(sex)) {
 			femaleButton.setSelected(false);
-		    maleButton.setSelected(true);
-		}else if(female.equals(sex)){
+			maleButton.setSelected(true);
+		} else if (female.equals(sex)) {
 			femaleButton.setSelected(true);
-		    maleButton.setSelected(false);
-		}else{
+			maleButton.setSelected(false);
+		} else {
 			femaleButton.setSelected(false);
-		    maleButton.setSelected(false);
+			maleButton.setSelected(false);
 		}
 		insuranceBox.setValue(patient.getInsurance());
 
 	}
-	private void setInputs(String name, String surname, String pesel ){
+
+	private void setInputs(String name, String surname, String pesel) {
 		nameField.setText(name);
 		surnameField.setText(surname);
 		peselField.setText(pesel);
@@ -137,24 +144,25 @@ public class PatientForm extends GridPane implements PatientFormView{ //TODO cha
 		patient.setName(nameField.getText());
 		patient.setSurname(surnameField.getText());
 		patient.setPesel(peselField.getText());
-		String sex = femaleButton.isSelected()? "K" :
-						maleButton.isSelected()  ? "M" :
-						" ";
+		String sex = femaleButton.isSelected() ? "K" :
+					   maleButton.isSelected() ? "M" : " ";
 		patient.setSex(sex);
 		patient.setInsurance(insuranceBox.getValue());
 		return patient;
 	}
 
-
 	public Button getCancelButton() {
 		return cancelButton;
 	}
 
-
 	public Button getSaveButton() {
 		return saveButton;
 	}
-	
-	
+
+	@Override
+	public void setMessage(String msssage, Color color) {
+		messageText.setText(msssage);
+		messageText.setFill(color);	
+	}
 
 }

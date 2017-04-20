@@ -66,13 +66,14 @@ public class PatientTable extends VBox implements PatientTableView {
 		table.setOnMouseClicked(e->tableController.tableClicked(e));
 		table.getColumns().addAll(nameColumn, surnameColumn, sexColumn, peselColumn, insuraceColumn, testColumn);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		table.getStyleClass().add("table");
 		return table;
 	}
 
 	private Pane createButtonPane() {
 		HBox pane = new HBox();
 		addButton = new Button("Dodaj Pacienta");
-		addButton.addEventHandler(ActionEvent.ACTION,tableController);	
+		addButton.addEventHandler(ActionEvent.ACTION,tableController);
 		deleteButton = new Button("Usuń Pacienta");
 		deleteButton.addEventHandler(ActionEvent.ACTION,tableController);	
 		pane.getChildren().addAll(addButton, deleteButton);

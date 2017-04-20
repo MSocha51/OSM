@@ -2,6 +2,8 @@ package osm.view;
 
 import java.time.LocalDate;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -9,19 +11,21 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import osm.controller.PatientFormController;
 import osm.controller.TestFormController;
 import osm.model.BloodPressureTest;
 import osm.view.inter.TestFormView;
 
-public class TestForm extends GridPane implements TestFormView { // TODO change
-																	// Pane type
+public class TestForm extends GridPane implements TestFormView {
 	private TestFormController testFormController;
 	private Button cancelButton;
 	private Button saveButton;
 	private TextField systoleField;
 	private TextField diastoleField;
 	private DatePicker datePicker;
+	private Text messageText;
 
 	public TestForm(TestFormController testFormController) {
 		this.testFormController = testFormController;
@@ -31,7 +35,7 @@ public class TestForm extends GridPane implements TestFormView { // TODO change
 		createDateFields();
 		createPreassureFields();
 		createButtons();
-
+		createMessageText();
 		setHgap(10);
 		setVgap(10);
 		setPadding(new Insets(10, 10, 10, 10));
@@ -41,10 +45,27 @@ public class TestForm extends GridPane implements TestFormView { // TODO change
 		Label systoleLabel = new Label("Ciśnienie skurczowe:");
 		add(systoleLabel, 1, 2);
 		systoleField = new TextField();
+		// ustawienie tylko alfanumerycznych
+		systoleField.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (newValue != null && !newValue.matches("\\d*")) {
+					systoleField.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+		});
 		add(systoleField, 2, 2);
 		Label diastoleLabel = new Label("Ciśnienie rozkurczowe:");
 		add(diastoleLabel, 1, 3);
 		diastoleField = new TextField();
+		diastoleField.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (newValue != null && !newValue.matches("\\d*")) {
+					diastoleField.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+		});
 		add(diastoleField, 2, 3);
 	}
 
@@ -67,6 +88,12 @@ public class TestForm extends GridPane implements TestFormView { // TODO change
 		saveButton.addEventHandler(ActionEvent.ACTION, testFormController);
 	}
 
+	private void createMessageText() {
+		messageText = new Text();
+		messageText.setText("");
+		add(messageText, 1, 5);
+	}
+
 	private void setInputs(String systole, String diastole, LocalDate date) {
 		systoleField.setText(systole);
 		diastoleField.setText(diastole);
@@ -76,20 +103,42 @@ public class TestForm extends GridPane implements TestFormView { // TODO change
 	@Override
 	public void clearForm() {
 		setInputs(null, null, null);
+		messageText.setText("");
+		messageText.setFill(Color.BLACK);
+		systoleField.setStyle("-fx-control-inner-background: #FFFFFF");
+		diastoleField.setStyle("-fx-control-inner-background: #FFFFFF");
 
 	}
 
 	@Override
 	public void setTest(BloodPressureTest test) {
-		setInputs(test.getSystole().toString(), test.getDiastole().toString(), test.getDate());
+		Integer systole = test.getSystole();
+		Integer diastole = test.getDiastole();
+		setInputs(systole.toString(), diastole.toString(), test.getDate());
+		if (systole > 140 || systole < 100)
+			systoleField.setStyle("-fx-control-inner-background: #FF0000");
+		else
+			systoleField.setStyle("-fx-control-inner-background: #FFFFFF");
+
+		if (diastole > 100 || diastole < 60)
+			diastoleField.setStyle("-fx-control-inner-background: #FF0000");
+		else
+			diastoleField.setStyle("-fx-control-inner-background: #FFFFFF");
 
 	}
 
 	@Override
 	public BloodPressureTest getTest() {
 		BloodPressureTest test = new BloodPressureTest();
-		test.setSystole(Integer.parseInt(systoleField.getText()));
-		test.setDiastole(Integer.parseInt(diastoleField.getText()));
+		String systole = systoleField.getText();
+		String diastole = diastoleField.getText();
+		try {
+			test.setSystole(Integer.parseInt(systole));
+			test.setDiastole(Integer.parseInt(diastole));
+		} catch (NumberFormatException e) {
+			test.setSystole(null);
+			test.setDiastole(null);
+		}
 		test.setDate(datePicker.getValue());
 		return test;
 	}
@@ -100,6 +149,12 @@ public class TestForm extends GridPane implements TestFormView { // TODO change
 
 	public Button getSaveButton() {
 		return saveButton;
+	}
+
+	@Override
+	public void setMessage(String msssage, Color color) {
+		messageText.setText(msssage);
+		messageText.setFill(color);
 	}
 
 }
