@@ -2,8 +2,10 @@ package osm.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.paint.Color;
 import osm.model.Patient;
 import osm.repository.PatientRepository;
+import osm.validator.PatientValidator;
 import osm.view.PatientForm;
 import osm.view.TestForm;
 import osm.view.inter.PatientTableView;
@@ -18,15 +20,24 @@ public class PatientFormController implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
-		if (event.getSource() == patientForm.getCancelButton()) {
-			patientForm.clearForm();
-			patientForm.setDisable(true);
-			patientTable.clearActivePatient();
-			testForm.clearForm();
-			testForm.setDisable(true);
-		}
-		if (event.getSource() == patientForm.getSaveButton()) {
-			Patient patient = patientForm.getPatient();
+		if (event.getSource() == patientForm.getCancelButton())
+			cancelAction();			
+		if (event.getSource() == patientForm.getSaveButton())
+			saveAction();
+
+	}
+
+	private void cancelAction() {
+		patientForm.clearForm();
+		patientForm.setDisable(true);
+		patientTable.clearActivePatient();
+		testForm.clearForm();
+		testForm.setDisable(true);		
+	}
+
+	private void saveAction() {
+		Patient patient = patientForm.getPatient();
+		if (PatientValidator.valid(patient)) {
 			Patient selectedPatient = patientTable.getActivePatient();
 			if (selectedPatient != null) {
 				patientRepo.removePatient(selectedPatient);
@@ -38,6 +49,9 @@ public class PatientFormController implements EventHandler<ActionEvent> {
 			testForm.setDisable(false);
 			if (patient.getBloodPressureTest() != null)
 				testForm.setTest(patient.getBloodPressureTest());
+			patientForm.setMessage("Udało się zapisać", Color.BLACK);			
+		} else {
+			patientForm.setMessage("Błedne dane", Color.RED);
 		}
 
 	}

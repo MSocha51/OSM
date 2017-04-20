@@ -32,18 +32,19 @@ public class PatientTableController implements EventHandler<Event> {
 			tableView.reloadTable(patientRepository.getPatients());
 			testFormView.setDisable(true);
 			patientFormView.setDisable(true);
+			testFormView.clearForm();
+			patientFormView.clearForm();
 		}
 	}
 
 	public void tableClicked(MouseEvent e) {
 		Patient patient = tableView.getTable().getSelectionModel().getSelectedItem();
 		if (patient != null) {
+			patientFormView.clearForm();
 			patientFormView.setPatient(patient);
+			testFormView.clearForm();
 			if (patient.getBloodPressureTest() != null)
 				testFormView.setTest(patient.getBloodPressureTest());
-			else{
-				testFormView.clearForm();
-			}
 			testFormView.setDisable(false);
 			patientFormView.setDisable(false);
 		}
